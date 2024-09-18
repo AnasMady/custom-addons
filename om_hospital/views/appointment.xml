@@ -6,22 +6,31 @@
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
             <form>
-                <header>
-                    <field name="state" widget="statusbar" options="{'clickable':'1'}" nolabel="1"
+                <header style="display:flex;justify-content:space-around">
+                    <button name="draft_method" type="object" string="Reset To Draft" class="oe_highlight"
+                            states="cancel" data-hotkey="l"/>
+                    <button name="in_consultation_method" type="object" string="In Consultation" class="oe_highlight"
+                            states="draft" data-hotkey="t"/>
+                    <button name="done_method" type="object" string="Mark As Done" class="oe_highlight"
+                            states="draft,in_consultation" data-hotkey="d"/>
+                    <button name="cancel_method" type="object" string="Cancel" states="draft,in_consultation"
+                            data-hotkey="x"/>
+                    <field name="state" widget="statusbar" nolabel="1"
                            statusbar_visible="draft,in_consultation,done"/>
                 </header>
                 <sheet>
                     <div>
                         <h2 style="display:flex;justify-content:space-around;padding-bottom:10px;border-bottom:#ddd 1px solid">
                             <div>
-                                <button name="increment_priority" string="+" class="oe_highlight" type="object" style="margin-right:10px;padding:5px"/>
+                                <button name="decrement_priority" string="-" class="oe_highlight" type="object"
+                                        style="margin-right:10px;width:30px"/>
                                 <field name="priority" widget="priority"/>
-                                <button name="decrement_priority" string="-" class="oe_highlight" type="object" style="margin-left:10px;padding:5px"/>
+                                <button name="increment_priority" string="+" class="oe_highlight" type="object"
+                                        style="margin-left:10px;width:30px"/>
                             </div>
                             <button name="%(om_hospital.action_patient)d" confirm="Sure?" type="action"
                                     string="Visit Patients"
                                     class="oe_highlight"/>
-                            <button name="cancel" type="object" string="Cancel" class="oe_highlight"/>
                         </h2>
                     </div>
                     <group>
@@ -31,6 +40,7 @@
                             <field name="booking_date"/>
                         </group>
                         <group>
+                            <field name="hide_price" groups="base.group_no_one"/>
                             <field name="appointment_time"/>
                         </group>
                     </group>
@@ -43,6 +53,22 @@
                         </page>
                         <page name="prescription" string="Prescription">
                             <field name="prescription" options="{'collaborative':true,'resizable':true}"/>
+                        </page>
+                        <page name="pharmacy" string="Pharmacy">
+                            <field name="pharmacy_lines_ids">
+                                <form>
+                                    <group>
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="price" attrs="{'column_invisible':[('parent.hide_price','=',True)]}"/>
+                                    </group>
+                                </form>
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="qty"/>
+                                    <field name="price" attrs="{'column_invisible':[('parent.hide_price','=',True)]}"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
