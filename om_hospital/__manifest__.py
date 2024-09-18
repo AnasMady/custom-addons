@@ -6,10 +6,12 @@
     'summary': 'Hospital Management System',
     'description': """Hospital Management System""",
     'sequence': -200,
-    'depends': [],
+    'depends': ['mail'],
     'data': [
         'security/ir.model.access.csv',
         'views/patient.xml',
+        'views/female.patient.xml',
+        'views/appointment.xml',
         'views/menu.xml',
     ],
     'demo': [],
